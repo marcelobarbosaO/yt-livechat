@@ -9,24 +9,24 @@ $(function () {
   function loadClient() {
     gapi.client.setApiKey("AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc");
     return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-      .then(function () { console.log("GAPI client loaded for API"); },
+      .then(function () {
+        console.log("GAPI client loaded for API");
+        var videoId = $('input[name="live_id"]').val();
+
+        return gapi.client.youtube.liveBroadcasts.list({
+          "part": [
+            "snippet,contentDetails,status"
+          ],
+          "id": [ videoId ]
+        }).then(function (response) {
+            console.log("Response", response);
+        }, function (err) { console.error("Execute error", err); });
+      },
         function (err) { console.error("Error loading GAPI client for API", err); });
   }
 
   function execute() {
-
     authenticate().then(loadClient);
-
-    var videoId = $('input[name="live_id"]').val();
-
-    return gapi.client.youtube.liveBroadcasts.list({
-      "part": [
-        "snippet,contentDetails,status"
-      ],
-      "id": [ videoId ]
-    }).then(function (response) {
-        console.log("Response", response);
-    }, function (err) { console.error("Execute error", err); });
   }
 
   gapi.load("client:auth2", function () {
