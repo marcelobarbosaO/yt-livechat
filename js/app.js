@@ -51,11 +51,7 @@ $(function () {
   }
 
   function execute() {
-    var auth2 = gapi.auth2.getAuthInstance();
-
-    if ( !auth2.isSignedIn.get() ) return authenticate().then(loadClient);
-
-    getLives();
+    authenticate().then(loadClient);
   }
 
   gapi.load("client:auth2", function () {
