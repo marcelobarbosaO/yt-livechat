@@ -57,13 +57,13 @@ $(function () {
           var message = val.snippet.displayMessage;
           $('.messages ul').append([
             '<li>',
-              '<img src="'+ channel.profileImageUrl + '" width="25" height="25"/>',
+              '<img src="'+ channel.profileImageUrl + '/>',
               '<div>',
                 '<h4>' + channel.displayName + '</h4>',
                 '<p>' + message + '</p>',
               '</div>',
             '</li>'
-          ].join());
+          ].join(''));
         });
       }
     }, function (err) { console.error("Execute error", err); });
@@ -84,7 +84,7 @@ $(function () {
   });
 
   $('button#getNewMessages').on('click', function () {
-    var liveId = $(this).attrt('data-live-id');
+    var liveId = $(this).attr('data-live-id');
 
     getComments(liveId);
   });

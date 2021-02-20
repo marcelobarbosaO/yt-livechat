@@ -16,7 +16,14 @@
 .messages li{
   display: flex;
 }
+
+.messages li div {
+  padding-left: 15px;
+}
+
 .messages li img {
-  border-radius: 15px;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
   border: 2px solid #000;
 }
