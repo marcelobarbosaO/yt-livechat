@@ -73,6 +73,9 @@ $(function () {
       data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
       type: 'get',
       dataType: 'json',
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+      },
       success: function (data) {
         if (data.items.length > 0) {
           var liveId = data.items[0].snippet.liveChatId;
@@ -95,6 +98,9 @@ $(function () {
       data: { "key": apikey, liveChatId: liveId, part: 'snippet,authorDetails' },
       type: 'get',
       dataType: 'json',
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+      },
       success: function (data) {
         $('#comments').removeClass('hide');
         $('#get_live_id').addClass('hide');
