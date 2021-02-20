@@ -13,25 +13,37 @@
   display: none !important;
 }
 
-.messages li{
+.messages li, .carrossel li{
   display: flex;
   margin-bottom: 20px;
   align-items: center;
 }
 
-.messages li div {
+.messages li div, .carrossel li div {
   padding-left: 15px;
   text-align: left;
 }
 
-.messages li div h4{
+.messages li div h4, .carrossel li div h4{
   white-space: nowrap;
   margin-bottom: 7px;
 }
 
-.messages li img {
+.messages li img, .carrossel li img {
   border-radius: 20px;
   width: 40px;
   height: 40px;
   border: 2px solid #000;
+}
+
+.carrossel ul{
+  display: flex;
+  animation: carrosselAnimated 10s infinite
+}
+
+@keyframes carrosselAnimated {
+  from {
+    transform: translateX(100%);
+  }
+  to{ transform: translateX(-100%); }
 }

@@ -110,6 +110,7 @@ $(function () {
         $('#comments').removeClass('hide');
         $('#get_live_id').addClass('hide');
         $('.messages ul').html('');
+        $('.carrossel ul').html('');
 
         if (data.items.length > 0) {
           var messages = data.items.reverse();
@@ -127,6 +128,7 @@ $(function () {
               '</li>'
             ];
             $('.messages ul').append(html.join(''));
+            $('.carrossel ul').append(html.join(''));
           });
         } else {
           $('.messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
