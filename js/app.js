@@ -41,12 +41,14 @@ $(function () {
       "liveChatId": liveId,
       "maxResults": 10
     }).then(function (response) {
-      var lives = response.result.items;
+      var messages = response.items;
 
-      if (lives.length > 0) {
-        var liveId = lives[0].snippet.liveChatId;
-        getComments(liveId);
-      }
+      $('#getNewMessages').attr('data-live-id', liveId);
+
+      $('#comments').removeClass('hide');
+      $('#get_live_id').addClass('hide');
+
+      console.log("MENSAGENS:: ", messages);
     }, function (err) { console.error("Execute error", err); });
   }
 
@@ -62,5 +64,16 @@ $(function () {
 
   $('button').on('click', function () {
     execute();
+  });
+
+  $('button#getNewMessages').on('click', function () {
+    var liveId = $(this).attrt('data-live-id');
+
+    getComments(liveId);
+  });
+
+  $('button#changeVideo').on('click', function () {
+    $('#comments').addClass('hide');
+    $('#get_live_id').removeClass('hide');
   });
 });
