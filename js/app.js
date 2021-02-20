@@ -95,7 +95,12 @@ $(function () {
   function getComments(liveId) {
     $.ajax({
       url: YT_API.messages,
-      data: { "key": apikey, liveChatId: liveId, part: 'snippet,authorDetails' },
+      data: {
+        "key": apikey,
+        liveChatId: liveId,
+        part: 'snippet,authorDetails',
+        maxResults: 200
+      },
       type: 'get',
       dataType: 'json',
       beforeSend: function(xhr){
@@ -107,7 +112,9 @@ $(function () {
         $('.messages ul').html('');
 
         if (data.items.length > 0) {
-          data.items.forEach(function (val, index) {
+          var messages = data.items.reverse();
+
+          messages.forEach(function (val, index) {
             var channel = val.authorDetails;
             var message = val.snippet.displayMessage;
             var html = [
