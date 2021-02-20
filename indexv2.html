@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
     <title>YT LIVE CHAT</title>
 
     <link href="css/index.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="container hide" id="googleSignIn">
-      <button id="google">Entrar com sua conta google</button>
-    </div>
-
-
-    <div class="container hide" id="get_live_id">
+    <div class="container" id="get_live_id">
       <h3>Obter Comentários</h3>
 
       <br/><br/>
@@ -21,7 +17,7 @@
 
       <br/><br/>
 
-      <button id="find_live_id">Carregar</button>
+      <button>Carregar</button>
     </div>
 
     <div class="container hide" id="comments">
@@ -41,6 +37,7 @@
     </div>
 
     <script src="js/jquery.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

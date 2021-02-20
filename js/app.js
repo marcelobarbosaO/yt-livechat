@@ -1,87 +1,133 @@
 $(function () {
-  function authenticate() {
-    return gapi.auth2.getAuthInstance()
-      .signIn({ scope: "https://www.googleapis.com/auth/youtube.readonly" })
-      .then(function () { console.log("Sign-in successful"); },
-        function (err) { console.error("Error signing in", err); });
+  var apikey = 'AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc';
+  var clientID = '1071083884583-n46pbsol5s9q215o52h45tr7o1lih2kj.apps.googleusercontent.com';
+  var clientSecret = 'N5M5FRj4--9_qKx0-04b1B5u';
+  var accessToken = null;
+
+  var YT_API = {
+    lives: 'https://www.googleapis.com/youtube/v3/liveBroadcasts',
+    messages: 'https://youtube.googleapis.com/youtube/v3/liveChat/messages',
+    validateToken: 'https://www.googleapis.com/oauth2/v1/tokeninfo',
+    refreshToken: 'https://accounts.google.com/o/oauth2/token',
   }
 
-  function loadClient() {
-    gapi.client.setApiKey("AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc");
+  function refreshToken() {
+    var obj = {
+      client_id: clientID,
+      client_secret: clientSecret,
+      refresh_token: accessToken,
+      grant_type: "refresh_token"
+    }
 
-    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-      .then(function () {
-        getLives();
-      }, function (err) { console.error("Error loading GAPI client for API", err); });
+    $.ajax({
+      url: YT_API.refreshToken,
+      data: obj,
+      type: 'post',
+      dataType: 'json',
+      success: function (data) {
+        if (data.access_token === "online") {
+          accessToken = data.access_token;
+          openTab(actions);
+        }
+      },
+      error: function (err) {
+        console.log(err);
+        alert('erro refresh');
+      }
+    })
+  }
+
+  function validateToken(actions) {
+    $.ajax({
+      url: YT_API.validateToken,
+      data: { "access_token": accessToken },
+      type: 'get',
+      dataType: 'json',
+      success: function (data) {
+        if (data.access_type === "online") {
+          openTab(actions);
+        } else {
+          refreshToken(actions);
+        }
+      },
+      error: function (err) {
+        console.log(err);
+        alert('erro validate');
+      }
+    })
+  }
+
+  function openTab(actions) {
+    $('.container').addClass('hide');
+
+    if (actions.action === 'find_video') $('#get_live_id').removeClass('hide');
+    if (actions.action === 'show_comments') $('#comments').removeClass('hide');
+    if (actions.action === 'sign_in') $('#googleSignIn').removeClass('hide');
   }
 
   function getLives() {
     var videoId = $('input[name="live_id"]').val();
 
-    return gapi.client.youtube.liveBroadcasts.list({
-      "part": [
-        "snippet,contentDetails,status"
-      ],
-      "id": [videoId]
-    }).then(function (response) {
-      var lives = response.result.items;
+    $.ajax({
+      url: YT_API.lives,
+      data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
+      type: 'get',
+      dataType: 'json',
+      success: function (data) {
+        if (data.items.length > 0) {
+          var liveId = data.items[0].snippet.liveChatId;
 
-      if (lives.length > 0) {
-        var liveId = lives[0].snippet.liveChatId;
-        getComments(liveId);
+          $('button#getNewMessages').attr('data-live-id', liveId);
+
+          getComments(liveId);
+        }
+      },
+      error: function (err) {
+        console.log(err);
+        alert('erro lives');
       }
-    }, function (err) { console.error("Execute error", err); });
+    })
   }
 
   function getComments(liveId) {
-    return gapi.client.youtube.liveChatMessages.list({
-      "part": [
-        "snippet,authorDetails"
-      ],
-      "liveChatId": liveId,
-      "maxResults": 10
-    }).then(function (response) {
-      var messages = response.result.items;
+    $.ajax({
+      url: YT_API.messages,
+      data: { "key": apikey, liveChatId: liveId, part: 'snippet,authorDetails' },
+      type: 'get',
+      dataType: 'json',
+      success: function (data) {
+        $('#comments').removeClass('hide');
+        $('#get_live_id').addClass('hide');
+        $('.messages ul').html('');
 
-      $('#getNewMessages').attr('data-live-id', liveId);
-
-      $('#comments').removeClass('hide');
-      $('#get_live_id').addClass('hide');
-      $('.messages ul').html('');
-
-      console.log("MENSAGENS:: ", messages);
-
-      if ( messages.length > 0 ) {
-        messages.forEach(function(val, index){
-          var channel = val.authorDetails;
-          var message = val.snippet.displayMessage;
-          var html = [
-            '<li>',
-              '<img src="'+ channel.profileImageUrl + '"/>',
-              '<div>',
-                '<h4>' + channel.displayName + '</h4>',
-                '<p>' + message + '</p>',
-              '</div>',
-            '</li>'
-          ];
-          $('.messages ul').append( html.join(''));
-        });
+        if (data.items.length > 0) {
+          messages.forEach(function (val, index) {
+            var channel = val.authorDetails;
+            var message = val.snippet.displayMessage;
+            var html = [
+              '<li>',
+                '<img src="' + channel.profileImageUrl + '"/>',
+                '<div>',
+                  '<h4>' + channel.displayName + '</h4>',
+                  '<p>' + message + '</p>',
+                '</div>',
+              '</li>'
+            ];
+            $('.messages ul').append(html.join(''));
+          });
+        } else {
+          $('.messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
+        }
+      },
+      error: function (err) {
+        console.log(err);
+        alert('erro mensagens');
       }
-    }, function (err) { console.error("Execute error", err); });
+    })
   }
 
-  function execute() {
-    authenticate().then(loadClient);
-  }
-
-  gapi.load("client:auth2", function () {
-    auth2 = gapi.auth2.init({
-      client_id: "1071083884583-n46pbsol5s9q215o52h45tr7o1lih2kj.apps.googleusercontent.com"
-    });
-  });
-
-  $('button').on('click', function () {
-    execute();
+  $('button#find_live_id').on('click', function () {
+    getLives();
   });
 
   $('button#getNewMessages').on('click', function () {
@@ -94,4 +140,11 @@ $(function () {
     $('#comments').addClass('hide');
     $('#get_live_id').removeClass('hide');
   });
+
+
+  if (accessToken === null) {
+    $('#googleSignIn').removeClass('hide');
+  } else {
+    validateToken({ action: 'find_video' });
+  }
 });
