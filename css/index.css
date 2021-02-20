@@ -15,10 +15,18 @@
 
 .messages li{
   display: flex;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 .messages li div {
   padding-left: 15px;
+  text-align: left;
+}
+
+.messages li div h4{
+  white-space: nowrap;
+  margin-bottom: 7px;
 }
 
 .messages li img {
