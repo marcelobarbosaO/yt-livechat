@@ -107,7 +107,7 @@ $(function () {
         $('.messages ul').html('');
 
         if (data.items.length > 0) {
-          messages.forEach(function (val, index) {
+          data.items.forEach(function (val, index) {
             var channel = val.authorDetails;
             var message = val.snippet.displayMessage;
             var html = [
