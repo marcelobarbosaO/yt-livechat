@@ -130,6 +130,12 @@ $(function () {
     getLives();
   });
 
+  $('button#googleSignIn').on('click', function () {
+    var url = 'https://marcelobarbosao.github.io/yt-livechat/index.html';
+
+    location.href = 'https://accounts.google.com/o/oauth2/auth?client_id='+ clientID +'&redirect_uri='+ url +'&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
+  });
+
   $('button#getNewMessages').on('click', function () {
     var liveId = $(this).attr('data-live-id');
 
@@ -141,9 +147,15 @@ $(function () {
     $('#get_live_id').removeClass('hide');
   });
 
-
   if (accessToken === null) {
-    $('#googleSignIn').removeClass('hide');
+    const urlParams = new URLSearchParams(window.location.search);
+    if( urlParams.get('access_token') !== null ) {
+      accessToken = urlParams.get('access_token');
+
+      validateToken({ action: 'find_video' });
+    } else {
+      $('#googleSignIn').removeClass('hide');
+    }
   } else {
     validateToken({ action: 'find_video' });
   }
