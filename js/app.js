@@ -41,14 +41,31 @@ $(function () {
       "liveChatId": liveId,
       "maxResults": 10
     }).then(function (response) {
-      var messages = response.items;
+      var messages = response.result.items;
 
       $('#getNewMessages').attr('data-live-id', liveId);
 
       $('#comments').removeClass('hide');
       $('#get_live_id').addClass('hide');
+      $('.messages ul').html('');
 
       console.log("MENSAGENS:: ", messages);
+
+      if ( messages.length > 0 ) {
+        messages.forEach(function(val, index){
+          var channel = val.authorDetails;
+          var message = val.snippet.displayMessage;
+          $('.messages ul').append([
+            '<li>',
+              '<img src="'+ channel.profileImageUrl + '" width="25" height="25"/>',
+              '<div>',
+                '<h4>' + channel.displayName + '</h4>',
+                '<p>' + message + '</p>',
+              '</div>',
+            '</li>'
+          ].join());
+        });
+      }
     }, function (err) { console.error("Execute error", err); });
   }
 
