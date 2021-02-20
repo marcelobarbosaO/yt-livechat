@@ -55,15 +55,16 @@ $(function () {
         messages.forEach(function(val, index){
           var channel = val.authorDetails;
           var message = val.snippet.displayMessage;
-          $('.messages ul').append([
+          var html = [
             '<li>',
-              '<img src="'+ channel.profileImageUrl + '/>',
+              '<img src="'+ channel.profileImageUrl + '"/>',
               '<div>',
                 '<h4>' + channel.displayName + '</h4>',
                 '<p>' + message + '</p>',
               '</div>',
             '</li>'
-          ].join(''));
+          ];
+          $('.messages ul').append( html.join(''));
         });
       }
     }, function (err) { console.error("Execute error", err); });
