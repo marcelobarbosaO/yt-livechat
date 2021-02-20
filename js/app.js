@@ -130,7 +130,7 @@ $(function () {
     getLives();
   });
 
-  $('button#googleSignIn').on('click', function () {
+  $('button#google').on('click', function () {
     var url = 'https://marcelobarbosao.github.io/yt-livechat/index.html';
 
     location.href = 'https://accounts.google.com/o/oauth2/auth?client_id='+ clientID +'&redirect_uri='+ url +'&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
