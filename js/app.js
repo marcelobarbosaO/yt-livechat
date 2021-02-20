@@ -148,9 +148,9 @@ $(function () {
   });
 
   if (accessToken === null) {
-    const urlParams = new URLSearchParams(window.location.search);
-    if( urlParams.get('access_token') !== null ) {
-      accessToken = urlParams.get('access_token');
+    var hash = window.location.hash;
+    if( hash !== "") {
+      accessToken = hash.split('&').shift().split('=').pop();
 
       validateToken({ action: 'find_video' });
     } else {
