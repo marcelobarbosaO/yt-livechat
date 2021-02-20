@@ -51,7 +51,9 @@ $(function () {
   }
 
   function execute() {
-    if (!gapi.auth2.isSignedIn.get()) return authenticate().then(loadClient);
+    var auth2 = gapi.auth2.getAuthInstance();
+
+    if ( !auth2.isSignedIn.get() ) return authenticate().then(loadClient);
 
     getLives();
   }
