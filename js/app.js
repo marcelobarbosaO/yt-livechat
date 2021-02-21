@@ -83,6 +83,8 @@ $(function () {
               var url = window.location.href;
 
               window.location.href = url + '&videoId=' + videoId;
+
+              location.reload();
             } else {
               var liveId = data.items[0].snippet.liveChatId;
 
