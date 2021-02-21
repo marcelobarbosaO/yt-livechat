@@ -65,7 +65,7 @@ $(function () {
     if (actions.action === 'sign_in') $('#googleSignIn').removeClass('hide');
   }
 
-  function getLives() {
+  function getLives(actions) {
     var videoId = $('input[name="live_id"]').val();
 
     if (videoId !== "") {
@@ -79,13 +79,16 @@ $(function () {
         },
         success: function (data) {
           if (data.items.length > 0) {
-            var url = window.location.href;
-            window.location.replace = url + '&videoId=' + videoId;
-            // var liveId = data.items[0].snippet.liveChatId;
+            if (actions.redirect) {
+              var url = window.location.href;
+              window.location.replace = url + '&videoId=' + videoId;
+            } else {
+              var liveId = data.items[0].snippet.liveChatId;
 
-            // $('a#getNewMessages').attr('data-live-id', liveId);
+              $('a#getNewMessages').attr('data-live-id', liveId);
 
-            // getComments(liveId);
+              getComments(liveId);
+            }
           }
         },
         error: function (err) {
@@ -149,7 +152,7 @@ $(function () {
   }
 
   $('a#find_live_id').on('click', function () {
-    getLives();
+    getLives({ redirect: true });
   });
 
   $('a#google').on('click', function () {
@@ -180,7 +183,7 @@ $(function () {
       if (lastItemHash.shift() === 'videoId') {
         $('input[name="live_id"]').val(lastItemHash.pop());
         openTab({ action: 'show_comments' });
-        getLives();
+        getLives({ redirect: false });
       } else {
         validateToken({ action: 'find_video' });
       }
