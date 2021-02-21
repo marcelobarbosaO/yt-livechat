@@ -109,7 +109,7 @@ $(function () {
       success: function (data) {
         $('#comments').removeClass('hide');
         $('#get_live_id').addClass('hide');
-        $('.messages ul').html('');
+        $('#comments .messages ul').html('');
         //$('.carrossel ul').html('');
 
         if (data.items.length > 0) {
@@ -127,10 +127,10 @@ $(function () {
                 '</div>',
               '</li>'
             ];
-            $('.messages ul').append(html.join(''));
+            $('#comments .messages ul').append(html.join(''));
           });
         } else {
-          $('.messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
+          $('#comments .messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
 
         setTimeout(function(){
