@@ -81,7 +81,8 @@ $(function () {
           if (data.items.length > 0) {
             if (actions.redirect) {
               var url = window.location.href;
-              window.location.replace = url + '&videoId=' + videoId;
+
+              window.location.href = url + '&videoId=' + videoId;
             } else {
               var liveId = data.items[0].snippet.liveChatId;
 
