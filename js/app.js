@@ -128,14 +128,14 @@ $(function () {
               '</li>'
             ];
             $('.messages ul').append(html.join(''));
-            //$('.carrossel ul').append(html.join(''));
-            setTimeout(function(){
-              getComments(liveId);
-            }, 5000);
           });
         } else {
           $('.messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
+
+        setTimeout(function(){
+          getComments(liveId);
+        }, 5000);
       },
       error: function (err) {
         console.log(err);
