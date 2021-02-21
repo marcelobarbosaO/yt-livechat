@@ -73,14 +73,14 @@ $(function () {
       data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
       type: 'get',
       dataType: 'json',
-      beforeSend: function(xhr){
+      beforeSend: function (xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
       },
       success: function (data) {
         if (data.items.length > 0) {
           var liveId = data.items[0].snippet.liveChatId;
 
-          $('button#getNewMessages').attr('data-live-id', liveId);
+          $('a#getNewMessages').attr('data-live-id', liveId);
 
           getComments(liveId);
         }
@@ -103,7 +103,7 @@ $(function () {
       },
       type: 'get',
       dataType: 'json',
-      beforeSend: function(xhr){
+      beforeSend: function (xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
       },
       success: function (data) {
@@ -113,27 +113,25 @@ $(function () {
         //$('.carrossel ul').html('');
 
         if (data.items.length > 0) {
-          var messages = data.items.reverse();
+          var item = data.items.reverse().shift();
+          var channel = item.authorDetails;
+          var message = item.snippet.displayMessage;
 
-          messages.forEach(function (val, index) {
-            var channel = val.authorDetails;
-            var message = val.snippet.displayMessage;
-            var html = [
-              '<li>',
-                '<img src="' + channel.profileImageUrl + '"/>',
-                '<div>',
-                  '<h4>' + channel.displayName + '</h4>',
-                  '<p>' + message + '</p>',
-                '</div>',
-              '</li>'
-            ];
-            $('#comments .messages ul').append(html.join(''));
-          });
+          var html = [
+            '<li>',
+              '<img src="' + channel.profileImageUrl + '"/>',
+              '<div>',
+                '<h4>' + channel.displayName + '</h4>',
+                '<p>' + message + '</p>',
+              '</div>',
+            '</li>'
+          ];
+          $('#comments .messages ul').append(html.join(''));
         } else {
           $('#comments .messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
 
-        setTimeout(function(){
+        setTimeout(function () {
           getComments(liveId);
         }, 5000);
       },
@@ -144,38 +142,38 @@ $(function () {
     })
   }
 
-  $('button#find_live_id').on('click', function () {
+  $('a#find_live_id').on('click', function () {
     getLives();
   });
 
-  $('button#google').on('click', function () {
+  $('a#google').on('click', function () {
     var url = 'https://marcelobarbosao.github.io/yt-livechat/index.html';
 
-    location.href = 'https://accounts.google.com/o/oauth2/auth?client_id='+ clientID +'&redirect_uri='+ url +'&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
+    location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + clientID + '&redirect_uri=' + url + '&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
   });
 
-  $('button#getNewMessages').on('click', function () {
+  $('a#getNewMessages').on('click', function () {
     var liveId = $(this).attr('data-live-id');
 
     getComments(liveId);
   });
 
-  $('button#changeVideo').on('click', function () {
+  $('a#changeVideo').on('click', function () {
     $('#comments').addClass('hide');
     $('#get_live_id').removeClass('hide');
   });
 
   if (accessToken === null) {
     var hash = window.location.hash;
-    if( hash !== "") {
+    if (hash !== "") {
       var items = hash.split('&');
 
       accessToken = items.shift().split('=').pop();
 
       var lastItemHash = items.pop().split('=');
-      if( lastItemHash.shift() === 'videoId' ){
-        $('input[name="live_id"]').val( lastItemHash.pop() );
-        openTab({action: 'show_comments' });
+      if (lastItemHash.shift() === 'videoId') {
+        $('input[name="live_id"]').val(lastItemHash.pop());
+        openTab({ action: 'show_comments' });
         getLives();
       } else {
         validateToken({ action: 'find_video' });
