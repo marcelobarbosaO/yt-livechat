@@ -168,9 +168,18 @@ $(function () {
   if (accessToken === null) {
     var hash = window.location.hash;
     if( hash !== "") {
-      accessToken = hash.split('&').shift().split('=').pop();
+      var items = hash.split('&');
 
-      validateToken({ action: 'find_video' });
+      accessToken = items.shift().split('=').pop();
+
+      var lastItemHash = items.pop().split('=');
+      if( lastItemHash.shift() === 'videoId' ){
+        $('input[name="live_id"]').val( lastItemHash.pop() );
+        openTab({action: 'show_comments' });
+        getLives();
+      } else {
+        validateToken({ action: 'find_video' });
+      }
     } else {
       $('#googleSignIn').removeClass('hide');
     }
