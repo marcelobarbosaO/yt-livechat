@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 .container {
   max-width: 300px;
@@ -17,8 +17,7 @@
 .messages li,
 .carrossel li {
   display: flex;
-  margin-bottom: 20px;
-  margin-right: 15px;
+  margin-top: 20px;
   align-items: flex-start;
 }
 
@@ -32,25 +31,28 @@
 .messages li div h4,
 .carrossel li div h4 {
   white-space: nowrap;
-  background: #006D77;
+  background: #006d77;
   font-size: 10px;
   padding: 5px;
   margin: 0;
   position: absolute;
-  left: -14px;
-  top: -14px;
-  color: #FFF;
+  left: -16px;
+  top: -12px;
+  color: #fff;
+  border-radius: 6px;
 }
 
 .messages li div p,
 .carrossel li div p {
   background: #83c5be;
-  color: #FFF;
+  color: #fff;
   padding: 10px 10px 10px 15px;
   position: relative;
-  left: -10px;
+  left: -24px;
   z-index: -1;
   font-size: 14px;
+  top: 4px;
+  border-radius: 6px;
 }
 
 .messages li img,
@@ -58,7 +60,7 @@
   border-radius: 25px;
   width: 50px;
   height: 50px;
-  border: 3px solid #006D77;
+  border: 3px solid #006d77;
   position: relative;
   z-index: 2;
 }
