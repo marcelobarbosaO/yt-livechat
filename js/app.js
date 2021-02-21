@@ -68,28 +68,34 @@ $(function () {
   function getLives() {
     var videoId = $('input[name="live_id"]').val();
 
-    $.ajax({
-      url: YT_API.lives,
-      data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
-      type: 'get',
-      dataType: 'json',
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      },
-      success: function (data) {
-        if (data.items.length > 0) {
-          var liveId = data.items[0].snippet.liveChatId;
+    if (videoId !== "") {
+      $.ajax({
+        url: YT_API.lives,
+        data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
+        type: 'get',
+        dataType: 'json',
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        },
+        success: function (data) {
+          if (data.items.length > 0) {
+            var url = window.location.href;
+            window.location.href = url + '&videoId=' + videoId;
+            // var liveId = data.items[0].snippet.liveChatId;
 
-          $('a#getNewMessages').attr('data-live-id', liveId);
+            // $('a#getNewMessages').attr('data-live-id', liveId);
 
-          getComments(liveId);
+            // getComments(liveId);
+          }
+        },
+        error: function (err) {
+          console.log(err);
+          alert('erro ao pegar os dados desse vídeo, veja se o ID está certo.');
         }
-      },
-      error: function (err) {
-        console.log(err);
-        alert('erro lives');
-      }
-    })
+      })
+    } else {
+      alert('Digite o id do video antes de continuar');
+    }
   }
 
   function getComments(liveId) {
@@ -119,11 +125,11 @@ $(function () {
 
           var html = [
             '<li>',
-              '<img src="' + channel.profileImageUrl + '"/>',
-              '<div>',
-                '<h4>' + channel.displayName + '</h4>',
-                '<p>' + message + '</p>',
-              '</div>',
+            '<img src="' + channel.profileImageUrl + '"/>',
+            '<div>',
+            '<h4>' + channel.displayName + '</h4>',
+            '<p>' + message + '</p>',
+            '</div>',
             '</li>'
           ];
           $('#comments .messages ul').append(html.join(''));
