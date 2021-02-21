@@ -80,7 +80,7 @@ $(function () {
         success: function (data) {
           if (data.items.length > 0) {
             var url = window.location.href;
-            window.location.href = url + '&videoId=' + videoId;
+            window.location.replace = url + '&videoId=' + videoId;
             // var liveId = data.items[0].snippet.liveChatId;
 
             // $('a#getNewMessages').attr('data-live-id', liveId);
