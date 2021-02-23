@@ -2,26 +2,52 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Rajdhani", sans-serif;
+}
+:root {
+  --white: #fff;
+  --black: #000;
+  --light-gray: #e5e5e5;
+  --light-blue: #1e8eaa47;
+  --medium-green: #42aba0;
+  --dark-green: #006d77;
+}
+
+body {
+  background-color: var(--light-gray);
 }
 .container {
-  max-width: 700px;
   margin: 0 auto;
   text-align: center;
+}
+
+a#google,
+a#find_live_id {
+  background-color: var(--white);
+  color: var(--black);
 }
 
 .hide {
   display: none !important;
 }
 
+.messages ul {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0;
+}
+
 .messages li,
-.carrossel li {
+.carrossel li,
+.message_active li {
   display: flex;
+  position: relative;
   margin-top: 20px;
   align-items: flex-start;
 }
 
 .messages li div,
+.message_active li div,
 .carrossel li div {
   padding-left: 15px;
   text-align: left;
@@ -29,10 +55,11 @@
 }
 
 .messages li div h4,
+.message_active li div h4,
 .carrossel li div h4 {
   white-space: nowrap;
-  background: #006d77;
-  font-size: 10px;
+  background: var(--dark-green);
+  font-size: 1rem;
   padding: 5px;
   margin: 0;
   position: absolute;
@@ -43,19 +70,21 @@
 }
 
 .messages li div p,
+.message_active li div p,
 .carrossel li div p {
-  background: #83c5be;
+  background: var(--medium-green);
   color: #fff;
   padding: 10px 10px 10px 15px;
   position: relative;
   left: -24px;
   z-index: -1;
   font-size: 14px;
-  top: 4px;
+  top: 9px;
   border-radius: 6px;
 }
 
 .messages li img,
+.message_active li img,
 .carrossel li img {
   border-radius: 25px;
   width: 50px;
@@ -63,6 +92,18 @@
   border: 3px solid #006d77;
   position: relative;
   z-index: 2;
+}
+
+.messages .activated::before {
+  content: "";
+  width: 101%;
+  height: 130%;
+  background: var(--light-blue);
+  position: absolute;
+  top: -18px;
+  left: -5px;
+  border-radius: 10px;
+  z-index: -1;
 }
 
 .carrossel {

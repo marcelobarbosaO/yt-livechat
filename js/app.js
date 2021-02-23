@@ -1,4 +1,5 @@
 $(function () {
+  var selectedItemIndex = null;
   var apikey = 'AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc';
   var clientID = '1071083884583-n46pbsol5s9q215o52h45tr7o1lih2kj.apps.googleusercontent.com';
   var clientSecret = 'N5M5FRj4--9_qKx0-04b1B5u';
@@ -58,7 +59,7 @@ $(function () {
   }
 
   function openTab(actions) {
-    $('.container').addClass('hide');
+    $('.boxes').addClass('hide');
 
     if (actions.action === 'find_video') $('#get_live_id').removeClass('hide');
     if (actions.action === 'show_comments') $('#comments').removeClass('hide');
@@ -121,24 +122,33 @@ $(function () {
       success: function (data) {
         $('#comments').removeClass('hide');
         $('#get_live_id').addClass('hide');
-        $('#comments .messages ul').html('');
+
         //$('.carrossel ul').html('');
 
         if (data.items.length > 0) {
-          var item = data.items.reverse().shift();
-          var channel = item.authorDetails;
-          var message = item.snippet.displayMessage;
+          var liQuantity = $('#comments .messages li').length;
+          if (data.items.length > liQuantity) {
+            $('#comments .messages ul').html('');
 
-          var html = [
-            '<li>',
-            '<img src="' + channel.profileImageUrl + '"/>',
-            '<div>',
-            '<h4>' + channel.displayName + '</h4>',
-            '<p>' + message + '</p>',
-            '</div>',
-            '</li>'
-          ];
-          $('#comments .messages ul').append(html.join(''));
+            var items = data.items.reverse();
+            for (var key in items) {
+              var id = items[key].id;
+              var channel = items[key].authorDetails;
+              var message = items[key].snippet.displayMessage;
+              var className = selectedItemIndex === id ? 'activated' : '';
+
+              var html = [
+                '<li data-index="' + id + '" class="' + className + '">',
+                '<img src="' + channel.profileImageUrl + '"/>',
+                '<div>',
+                '<h4>' + channel.displayName + '</h4>',
+                '<p>' + message + '</p>',
+                '</div>',
+                '</li>'
+              ];
+              $('#comments .messages ul').append(html.join(''));
+            }
+          }
         } else {
           $('#comments .messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
@@ -153,6 +163,19 @@ $(function () {
       }
     })
   }
+
+  $(document).on('click', '#comments .messages li', function () {
+    $('#comments .messages li').removeClass('activated');
+
+    var $li = $(this);
+    $li.addClass('activated');
+
+    selectedItemIndex = $li.attr('data-index');
+
+    var cloneElement = $li.clone();
+
+    $('.message_active ul').html(cloneElement);
+  });
 
   $('a#find_live_id').on('click', function () {
     getLives({ redirect: true });
