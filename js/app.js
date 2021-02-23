@@ -1,4 +1,10 @@
 $(function () {
+  const socket = io("https://cnt-lives.herokuapp.com/");
+  socket.on("connection", (socket) => {
+    console.log(socket.handshake.query); // prints { x: "42", EIO: "4", transport: "polling" }
+  });
+
+  var allMessages = [];
   var selectedItemIndex = null;
   var apikey = 'AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc';
   var clientID = '1071083884583-n46pbsol5s9q215o52h45tr7o1lih2kj.apps.googleusercontent.com';
@@ -131,6 +137,8 @@ $(function () {
             $('#comments .messages ul').html('');
 
             var items = data.items.reverse();
+            allMessages = items;
+
             for (var key in items) {
               var id = items[key].id;
               var channel = items[key].authorDetails;
@@ -138,7 +146,7 @@ $(function () {
               var className = selectedItemIndex === id ? 'activated' : '';
 
               var html = [
-                '<li data-index="' + id + '" class="' + className + '">',
+                '<li data-id="' + id + '" class="' + className + '">',
                 '<img src="' + channel.profileImageUrl + '"/>',
                 '<div>',
                 '<h4>' + channel.displayName + '</h4>',
@@ -170,11 +178,17 @@ $(function () {
     var $li = $(this);
     $li.addClass('activated');
 
-    selectedItemIndex = $li.attr('data-index');
+    selectedItemIndex = $li.attr('data-id');
 
-    var cloneElement = $li.clone();
+    var objectMessage = allMessages.find(function(item){ return item.id === selectedItemIndex });
 
-    $('.message_active ul').html(cloneElement);
+    if ( objectMessage !== undefined ) {
+      console.log("MANDAR MENSAGEM AQUI", objectMessage);
+      socket.emit('selected_message', objectMessage);
+      var cloneElement = $li.clone();
+
+      $('.message_active ul').html(cloneElement);
+    }
   });
 
   $('a#find_live_id').on('click', function () {
