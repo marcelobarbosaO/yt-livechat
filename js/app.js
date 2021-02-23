@@ -183,11 +183,10 @@ $(function () {
     var objectMessage = allMessages.find(function(item){ return item.id === selectedItemIndex });
 
     if ( objectMessage !== undefined ) {
-      console.log("MANDAR MENSAGEM AQUI", objectMessage);
       socket.emit('selected_message', objectMessage);
-      var cloneElement = $li.clone();
+      // var cloneElement = $li.clone();
 
-      $('.message_active ul').html(cloneElement);
+      // $('.message_active ul').html(cloneElement);
     }
   });
 
