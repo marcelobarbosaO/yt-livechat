@@ -19,9 +19,9 @@ $(function () {
         '</div>',
         '</li>'
       ];
-      $('#comments .messages ul').html(html.join(''));
+      $('#comments ul').html(html.join(''));
     } else {
-      $('#comments .messages ul').html('<li><span>Selecione uma mensagem abaixo pra ficar em destaque</span></li>');
+      $('#comments ul').html('<li><span>Selecione uma mensagem abaixo pra ficar em destaque</span></li>');
     }
   });
 });
