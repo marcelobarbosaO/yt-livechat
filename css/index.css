@@ -41,6 +41,7 @@ a#find_live_id {
 .messages li,
 .carrossel li,
 .message_active li {
+  cursor: pointer;
   display: flex;
   position: relative;
   margin-top: 20px;
