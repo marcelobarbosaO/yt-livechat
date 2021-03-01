@@ -169,6 +169,10 @@ a#find_live_id {
   #list-lives {
     max-width: 100%;
   }
+  #list-lives li.complete::before {
+    content: "Finalizada";
+    left: -138px;
+  }
 }
 
 @keyframes carrosselAnimated {
