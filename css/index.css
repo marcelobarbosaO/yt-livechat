@@ -122,6 +122,21 @@ a#find_live_id {
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
+  position: relative;
+}
+
+#list-lives li.complete::before {
+  content: "Finalizada";
+  font-weight: bold;
+  color: #fff;
+  background: red;
+  padding: 5px;
+  width: 100%;
+  position: absolute;
+  top: 14px;
+  left: -165px;
+  transform: rotate(-43deg);
+  font-size: 1rem;
 }
 
 #list-lives li:nth-child(odd) {

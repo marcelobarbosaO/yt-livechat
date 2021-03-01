@@ -99,9 +99,10 @@ $(function () {
               const thumbnail = live.thumbnails.high;
               const scheduleDate = live.scheduledStartTime;
               const liveChatId = live.liveChatId;
+              const status = lives[key].status.lifeCycleStatus;
 
               const html = [
-                '<li data-chat-id="' + liveChatId + '" data-live-id="' + lives[key].id + '">',
+                '<li class="'+ status + '" data-chat-id="' + liveChatId + '" data-live-id="' + lives[key].id + '">',
                 '<div class="img"><img src="' + thumbnail.url + '" /></div>',
                 '<div class="text">',
                 '<h5>' + title + '</h5>',
