@@ -35,18 +35,12 @@
 
 
     <div class="container boxes hide" id="get_live_id">
+      <h5>Clique na live abaixo para carregar os comentários.</h5>
       <br/><br/>
 
-      <h4>Digite o ID da sua live no campo abaixo</h4>
-
-      <br/><br/>
-
-
-      <input type="text" name="live_id" class="form-control"/>
-
-      <br/><br/>
-
-      <a id="find_live_id" class="btn btn-large">Carregar comentários</a>
+      <ul id="list-lives">
+        <li>Carregando Lista de lives. Aguarde...</li>
+      </ul>
     </div>
 
     <div class="container boxes hide" id="comments">
@@ -57,8 +51,9 @@
         </ul>
       </div>
 
-      <div class="carrossel hide">
-        <ul></ul>
+      <div>
+        <a class="btn btn-large btn-info" id="back-to-lives">Voltar</a>
+        <a class="btn btn-large btn-success" id="refresh-messages">Atualizar mensagens</a>
       </div>
     </div>
 

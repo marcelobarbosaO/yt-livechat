@@ -8,6 +8,7 @@
   --white: #fff;
   --black: #000;
   --light-gray: #e5e5e5;
+  --medium-gray: #d6d6d6;
   --light-blue: #1e8eaa47;
   --medium-green: #42aba0;
   --dark-green: #006d77;
@@ -108,13 +109,51 @@ a#find_live_id {
   z-index: -1;
 }
 
-.carrossel {
-  overflow: hidden;
+#list-lives {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 400px;
 }
-.carrossel ul {
+#list-lives li {
   display: flex;
-  width: fit-content;
-  animation: carrosselAnimated 10s infinite;
+  flex-direction: row;
+  max-height: 106px;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#list-lives li:nth-child(odd) {
+  background: var(--medium-gray);
+}
+
+#list-lives li .img {
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+}
+
+#list-lives li .img img {
+  max-height: 100%;
+}
+
+#list-lives li .text {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#list-lives li .text h5 {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+@media (max-width: 400px) {
+  #list-lives {
+    max-width: 100%;
+  }
 }
 
 @keyframes carrosselAnimated {

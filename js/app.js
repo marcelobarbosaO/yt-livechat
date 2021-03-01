@@ -6,6 +6,7 @@ $(function () {
 
   var allMessages = [];
   var selectedItemIndex = null;
+  var liveChatId = null;
   var apikey = 'AIzaSyDPqQmiTFpu8lwC7T7nJwEJduk-X-bO0bc';
   var clientID = '1071083884583-n46pbsol5s9q215o52h45tr7o1lih2kj.apps.googleusercontent.com';
   var clientSecret = 'N5M5FRj4--9_qKx0-04b1B5u';
@@ -18,7 +19,7 @@ $(function () {
     refreshToken: 'https://accounts.google.com/o/oauth2/token',
   }
 
-  function refreshToken() {
+  function refreshToken(actions) {
     var obj = {
       client_id: clientID,
       client_secret: clientSecret,
@@ -34,11 +35,11 @@ $(function () {
       success: function (data) {
         if (data.access_token === "online") {
           accessToken = data.access_token;
+
           openTab(actions);
         }
       },
       error: function (err) {
-        console.log(err);
         alert('erro refresh');
       }
     })
@@ -58,8 +59,15 @@ $(function () {
         }
       },
       error: function (err) {
-        console.log(err);
-        alert('erro validate');
+        if( err.status === 400 ){
+          liveChatId = null;
+
+          openTab({ action: 'sign_in' });
+
+          alert('Seu token expirou');
+        } else {
+          alert('Houve um erro ao validar o token');
+        }
       }
     })
   }
@@ -67,56 +75,71 @@ $(function () {
   function openTab(actions) {
     $('.boxes').addClass('hide');
 
-    if (actions.action === 'find_video') $('#get_live_id').removeClass('hide');
-    if (actions.action === 'show_comments') $('#comments').removeClass('hide');
-    if (actions.action === 'sign_in') $('#googleSignIn').removeClass('hide');
-  }
+    if (actions.action === 'find_video') {
+      $('#get_live_id').removeClass('hide');
 
-  function getLives(actions) {
-    var videoId = $('input[name="live_id"]').val();
-
-    if (videoId !== "") {
       $.ajax({
         url: YT_API.lives,
-        data: { "key": apikey, id: videoId, part: 'snippet,contentDetails,status' },
+        data: { "key": apikey, part: 'snippet,contentDetails,status', broadcastStatus: 'all' },
         type: 'get',
         dataType: 'json',
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
         },
         success: function (data) {
-          if (data.items.length > 0) {
-            if (actions.redirect) {
-              var url = window.location.href;
+          const lives = data.items;
 
-              window.location.href = url + '&videoId=' + videoId;
+          var htmlLives = "";
 
-              location.reload();
-            } else {
-              var liveId = data.items[0].snippet.liveChatId;
+          if (lives.length > 0) {
+            for (var key in lives) {
+              const live = lives[key].snippet;
 
-              $('a#getNewMessages').attr('data-live-id', liveId);
+              const title = live.title;
+              const thumbnail = live.thumbnails.high;
+              const scheduleDate = live.scheduledStartTime;
+              const liveChatId = live.liveChatId;
 
-              getComments(liveId);
+              const html = [
+                '<li data-chat-id="' + liveChatId + '" data-live-id="' + lives[key].id + '">',
+                '<div class="img"><img src="' + thumbnail.url + '" /></div>',
+                '<div class="text">',
+                '<h5>' + title + '</h5>',
+                '</div>',
+                '</li>'
+              ].join('');
+
+              htmlLives += html;
             }
+
+            $('#list-lives').html(htmlLives);
+          } else {
+            alert('Nenhuma live encontrada');
           }
         },
         error: function (err) {
-          console.log(err);
-          alert('erro ao pegar os dados desse vídeo, veja se o ID está certo.');
+          if( err.status === 401) {
+            liveChatId = null;
+
+            openTab({ action: 'sign_in' });
+
+            alert('Seu token expirou. Faça login novamente');
+          } else {
+            alert('Houve um erro ao obter a lista de lives da sua conta.');
+          }
         }
-      })
-    } else {
-      alert('Digite o id do video antes de continuar');
+      });
     }
+    if (actions.action === 'show_comments') $('#comments').removeClass('hide');
+    if (actions.action === 'sign_in') $('#googleSignIn').removeClass('hide');
   }
 
-  function getComments(liveId) {
+  function getComments() {
     $.ajax({
       url: YT_API.messages,
       data: {
         "key": apikey,
-        liveChatId: liveId,
+        liveChatId: liveChatId,
         part: 'snippet,authorDetails',
         maxResults: 200
       },
@@ -128,8 +151,6 @@ $(function () {
       success: function (data) {
         $('#comments').removeClass('hide');
         $('#get_live_id').addClass('hide');
-
-        //$('.carrossel ul').html('');
 
         if (data.items.length > 0) {
           var liQuantity = $('#comments .messages li').length;
@@ -160,16 +181,22 @@ $(function () {
         } else {
           $('#comments .messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
-
-        setTimeout(function () {
-          getComments(liveId);
-        }, 5000);
       },
       error: function (err) {
         console.log(err);
-        alert('erro mensagens');
+        if( err.status === 403 ){
+          alert('O chat dessa live não está ativo. Esta live já começou?');
+        } else if( err.status === 401) {
+          liveChatId = null;
+
+          openTab({ action: 'sign_in' });
+
+          alert('Seu token expirou. Faça login novamente');
+        } else {
+          alert('Houve um erro ao trazer as mensagens');
+        }
       }
-    })
+    });
   }
 
   $(document).on('click', '#comments .messages li', function () {
@@ -180,18 +207,36 @@ $(function () {
 
     selectedItemIndex = $li.attr('data-id');
 
-    var objectMessage = allMessages.find(function(item){ return item.id === selectedItemIndex });
+    var objectMessage = allMessages.find(function (item) { return item.id === selectedItemIndex });
 
-    if ( objectMessage !== undefined ) {
-      socket.emit('selected_message', objectMessage);
-      // var cloneElement = $li.clone();
-
-      // $('.message_active ul').html(cloneElement);
-    }
+    if (objectMessage !== undefined) socket.emit('selected_message', objectMessage);
   });
 
-  $('a#find_live_id').on('click', function () {
-    getLives({ redirect: true });
+  $(document).on('click', '#list-lives li', function () {
+    var chatId = $(this).attr('data-chat-id');
+    var liveId = $(this).attr('data-live-id');
+
+    if (chatId) {
+      var url = window.location.href;
+
+      window.location.href = url + '?liveId=' + liveId + '&chatId=' + chatId;
+
+      location.reload();
+    }
+  })
+
+  $('a#back-to-lives').on('click', function () {
+    liveChatId = null;
+
+    var urlHash = window.location.hash.split('?').shift();
+
+    window.location.href = urlHash;
+
+    location.reload();
+  });
+
+  $('a#refresh-messages').on('click', function () {
+    getComments();
   });
 
   $('a#google').on('click', function () {
@@ -200,30 +245,31 @@ $(function () {
     location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + clientID + '&redirect_uri=' + url + '&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
   });
 
-  $('a#getNewMessages').on('click', function () {
-    var liveId = $(this).attr('data-live-id');
-
-    getComments(liveId);
-  });
-
-  $('a#changeVideo').on('click', function () {
-    $('#comments').addClass('hide');
-    $('#get_live_id').removeClass('hide');
-  });
-
   if (accessToken === null) {
-    var hash = window.location.hash;
-    if (hash !== "") {
-      var items = hash.split('&');
+    var urlHash = window.location.hash;
 
-      accessToken = items.shift().split('=').pop();
+    if (urlHash !== "") {
+      var allParams = urlHash.split('#').pop().split('?');
 
-      var lastItemHash = items.pop().split('=');
-      if (lastItemHash.shift() === 'videoId') {
-        $('input[name="live_id"]').val(lastItemHash.pop());
-        openTab({ action: 'show_comments' });
-        getLives({ redirect: false });
+      if (allParams.length > 1) {
+        var accessToken = allParams.shift().split('&').shift().split('=').pop();
+        var params = allParams.pop().split('&');
+
+        var live = params.shift().split('=');
+        var chat = params.pop().split('=');
+
+        if (live.shift() === 'liveId' && chat.shift() === 'chatId') {
+          openTab({ action: 'show_comments' });
+
+          liveChatId = chat.pop();
+
+          getComments();
+        } else {
+          validateToken({ action: 'find_video' });
+        }
       } else {
+        accessToken = urlHash.split('&').shift().split('=').pop();
+
         validateToken({ action: 'find_video' });
       }
     } else {
