@@ -154,7 +154,7 @@ $(function () {
         $('#get_live_id').addClass('hide');
 
         if (data.items.length > 0) {
-          var liQuantity = $('#comments .messages li').length;
+          var liQuantity = $('#comments .messages li.messageChat').length;
           if (data.items.length > liQuantity) {
             $('#comments .messages ul').html('');
 
@@ -168,7 +168,7 @@ $(function () {
               var className = selectedItemIndex === id ? 'activated' : '';
 
               var html = [
-                '<li data-id="' + id + '" class="' + className + '">',
+                '<li data-id="' + id + '" class="' + className + ' messageChat">',
                 '<img src="' + channel.profileImageUrl + '"/>',
                 '<div>',
                 '<h4>' + channel.displayName + '</h4>',
@@ -180,7 +180,7 @@ $(function () {
             }
           }
         } else {
-          $('#comments .messages ul').html('<li><p>Nenhuma mensagem encontrada ainda.</p></li>');
+          $('#comments .messages ul').html('<li class="default"><p>Nenhuma mensagem encontrada ainda.</p></li>');
         }
       },
       error: function (err) {
