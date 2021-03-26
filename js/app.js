@@ -241,7 +241,7 @@ $(function () {
   });
 
   $('a#google').on('click', function () {
-    var url = 'https://marcelobarbosao.github.io/yt-livechat/index.html';
+    var url = 'https://livechat-one.vercel.app';
 
     location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + clientID + '&redirect_uri=' + url + '&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token';
   });
