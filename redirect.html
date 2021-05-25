@@ -9,6 +9,16 @@
         return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
       }
 
+      function eventFire(el, etype){
+        if (el.fireEvent) {
+          el.fireEvent('on' + etype);
+        } else {
+          var evObj = document.createEvent('Events');
+          evObj.initEvent(etype, true, false);
+          el.dispatchEvent(evObj);
+        }
+      }
+
       var queryString = window.location.search;
       var urlParams = new URLSearchParams(queryString);
       var params = '/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
@@ -24,7 +34,7 @@
       });
       var btn = document.getElementById('to-app');
       btn.setAttribute('href', url);
-      btn.dispatchEvent(evt);
+      eventFire(btn, 'click');
       // /btn.dispatchEvent(new Event('click'));
 
       // window.location.href = url;
