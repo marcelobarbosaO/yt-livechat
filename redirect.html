@@ -3,11 +3,16 @@
     <title>Flimed</title>
   </head>
   <body>
+    <a href="" id="to-app"></a>
     <script>
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
+      var queryString = window.location.search;
+      var urlParams = new URLSearchParams(queryString);
 
-      window.location.href = 'flimed://app/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
+      var url = 'flimed://app/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
+
+      var a = document.getElementById('to-app');
+      a.setAttribute('href', url);
+      a.click();
     </script>
   </body>
 </html>
