@@ -9,16 +9,6 @@
         return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
       }
 
-      function eventFire(el, etype){
-        if (el.fireEvent) {
-          el.fireEvent('on' + etype);
-        } else {
-          var evObj = document.createEvent('Events');
-          evObj.initEvent(etype, true, false);
-          el.dispatchEvent(evObj);
-        }
-      }
-
       window.onload = function(){
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
@@ -29,12 +19,11 @@
           url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
         }
 
-        // var evt = new MouseEvent('click', { shiftKey: true });
-        // var btn = document.getElementById('to-app');
-        // btn.setAttribute('href', url);
-        // btn.dispatchEvent(evt);
+        var clickTarget = document.getElementById("to-app");
+        var fakeMouseEvent = document.createEvent('MouseEvents');
+        fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
 
-        window.location.href = url;
+        clickTarget.dispatchEvent(fakeMouseEvent);
     }
     </script>
   </body>
