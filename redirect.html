@@ -7,7 +7,7 @@
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
 
-      window.location.href = 'flimed://payment_id:' + urlParams.get('payment_id') + '&status:' + urlParams.get('status') + '&payment_type:' + urlParams.get('payment_type');
+      window.location.href = 'flimed://app/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
     </script>
   </body>
 </html>
