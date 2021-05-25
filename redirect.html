@@ -3,7 +3,7 @@
     <title>Flimed</title>
   </head>
   <body>
-    <a href="" id="to-app">clicar</a>
+    <a href="flimed://app" id="to-app">clicar</a>
     <script>
       function iOS() {
         return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
@@ -20,7 +20,7 @@
         }
 
         var btn = document.getElementById('to-app');
-        btn.setAttribute('href', url);
+        // btn.setAttribute('href', url);
         var fakeMouseEvent = document.createEvent('MouseEvents');
         fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
 
