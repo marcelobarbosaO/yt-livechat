@@ -15,7 +15,7 @@
 
       var url = 'flimed://app' + params;
       if(!iOS()){
-        url = 'intent://app' + params +'/#Intent;package=com.app_patients;scheme=flimed';
+        url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
       }
 
       window.location.href = url;
