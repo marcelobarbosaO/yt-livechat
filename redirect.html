@@ -18,9 +18,9 @@
         url = 'intent:app/#Intent;package=com.app_patients;scheme=flimed';
       }
 
-      var a = document.getElementById('to-app');
-      a.setAttribute('href', url);
-      a.click();
+      window.location.href = url;
+
+      alert(url);
     </script>
   </body>
 </html>
