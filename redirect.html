@@ -19,11 +19,14 @@
           url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
         }
 
-        var clickTarget = document.getElementById("to-app");
+        var btn = document.getElementById('to-app');
+        btn.setAttribute('href', url);
         var fakeMouseEvent = document.createEvent('MouseEvents');
         fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
 
-        clickTarget.dispatchEvent(fakeMouseEvent);
+        btn.dispatchEvent(fakeMouseEvent);
+
+        // alert(url);
     }
     </script>
   </body>
