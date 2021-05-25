@@ -35,7 +35,9 @@
         });
         var btn = document.getElementById('to-app');
         btn.setAttribute('href', url);
-        eventFire(btn, 'click');
+        setTimeout(function(){
+          eventFire(btn, 'click');
+        }, 500);
         // /btn.dispatchEvent(new Event('click'));
 
         // window.location.href = url;
