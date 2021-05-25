@@ -29,14 +29,12 @@
           url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
         }
 
-        var evt = new MouseEvent('click', { shiftKey: true });
-        var btn = document.getElementById('to-app');
-        btn.setAttribute('href', url);
-        btn.dispatchEvent(evt);
+        // var evt = new MouseEvent('click', { shiftKey: true });
+        // var btn = document.getElementById('to-app');
+        // btn.setAttribute('href', url);
+        // btn.dispatchEvent(evt);
 
-        // window.location.href = url;
-
-        // alert(url);
+        window.location.href = url;
     }
     </script>
   </body>
