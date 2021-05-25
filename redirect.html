@@ -3,13 +3,13 @@
     <title>Flimed</title>
   </head>
   <body>
-    <a href="flimed://app" id="to-app">clicar</a>
+    <script src="js/jquery.js"></script>
     <script>
       function iOS() {
         return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
       }
 
-      window.onload = function(){
+      $(document).ready(function() {
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
         var params = '/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
@@ -19,15 +19,22 @@
           url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
         }
 
-        var btn = document.getElementById('to-app');
-        // btn.setAttribute('href', url);
-        var fakeMouseEvent = document.createEvent('MouseEvents');
-        fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
+        $('body').append('<a href="' + url + '" id="teste">TESTE CLICK</a>');
 
-        btn.dispatchEvent(fakeMouseEvent);
+        $(document).find('a').click();
+      });
 
-        // alert(url);
-    }
+      // window.onload = function(){
+
+
+      //   var btn = document.getElementById('to-app');
+      //   // btn.setAttribute('href', url);
+      //   var fakeMouseEvent = document.createEvent('MouseEvents');
+      //   fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
+
+      //   btn.dispatchEvent(fakeMouseEvent);
+
+      //   // alert(url);
     </script>
   </body>
 </html>
