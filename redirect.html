@@ -4,7 +4,10 @@
   </head>
   <body>
     <script>
-      window.location.href = 'flimed://';
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      window.location.href = 'flimed://payment_id:' + urlParams.get('payment_id') + '&status: ' + urlParams.get('status');
     </script>
   </body>
 </html>
