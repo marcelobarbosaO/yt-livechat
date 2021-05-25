@@ -18,11 +18,10 @@
         url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
       }
 
-      var btn = document.getElementById('to-app')
+      click_event = new CustomEvent('click');
+      var btn = document.getElementById('to-app');
       btn.setAttribute('href', url);
-      for(var i = 0; i < 50; i++){
-        btn.click();
-      }
+      btn.dispatchEvent(click_event);
       // /btn.dispatchEvent(new Event('click'));
 
       // window.location.href = url;
