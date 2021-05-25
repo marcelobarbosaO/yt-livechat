@@ -3,6 +3,7 @@
     <title>Flimed</title>
   </head>
   <body>
+    <a href="" id="teste">CLICAR</a>
     <script src="js/jquery.js"></script>
     <script>
       function iOS() {
@@ -19,9 +20,26 @@
           url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
         }
 
-        $('body').append('<a href="' + url + '" id="teste">TESTE CLICK</a>');
+        var btn = document.getElementById('teste');
+        btn.setAttribute('href', url);
 
-        $(document).find('a').trigger('click');
+        var evt = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+
+        var canceled = !btn.dispatchEvent(evt);
+
+        if(canceled) {
+          // A handler called preventDefault
+          alert("canceled");
+        } else {
+          // None of the handlers called preventDefault
+          alert("not canceled");
+        }
+
+        btn.addEventListener('click', simulateClick);
       });
 
       // window.onload = function(){
