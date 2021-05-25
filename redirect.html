@@ -20,7 +20,7 @@
 
       var btn = document.getElementById('to-app')
       btn.setAttribute('href', url);
-      btn.click();
+      btn.dispatchEvent(new MouseEvent('click', { shiftKey: true}));
 
       // window.location.href = url;
 
