@@ -10,32 +10,6 @@
         return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
       }
 
-      function simulateClick() {
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var params = '/payment_id=' + urlParams.get('payment_id') + '/status=' + urlParams.get('status') + '/payment_type=' + urlParams.get('payment_type');
-
-        var url = 'flimed://app' + params;
-        if(!iOS()){
-          url = 'intent://app' + params +'/#Intent;scheme=flimed;package=com.app_patients;end';
-        }
-
-        var evt = new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        });
-        var cb = document.getElementById("checkbox"); //element to click on
-        var canceled = !cb.dispatchEvent(evt);
-        if(canceled) {
-          // A handler called preventDefault
-          alert("canceled");
-        } else {
-          // None of the handlers called preventDefault
-          alert("not canceled");
-        }
-      }
-
       $(document).ready(function() {
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
@@ -57,18 +31,6 @@
 
         btn.dispatchEvent(evt);
       });
-
-      // window.onload = function(){
-
-
-      //   var btn = document.getElementById('to-app');
-      //   // btn.setAttribute('href', url);
-      //   var fakeMouseEvent = document.createEvent('MouseEvents');
-      //   fakeMouseEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 20, 10, false, false, false, false, 0, null);
-
-      //   btn.dispatchEvent(fakeMouseEvent);
-
-      //   // alert(url);
     </script>
   </body>
 </html>
